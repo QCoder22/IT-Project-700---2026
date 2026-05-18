@@ -1,0 +1,14 @@
+config/db.php
+
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+*.bak
+*.tmp
+*.log

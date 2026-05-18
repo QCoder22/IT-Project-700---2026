@@ -1,20 +1,15 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'medicom_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
-
-$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
-
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+$host = "localhost";
+$db   = "medicom_db";
+$user = "root";
+$pass = "";
 
 try {
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ]);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    throw new RuntimeException("DB connection failed: " . $e->getMessage());
 }
