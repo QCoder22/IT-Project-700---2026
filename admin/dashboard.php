@@ -6,8 +6,8 @@ require_once __DIR__ . '/../includes/functions.php';
 requireRole('admin');
 
 $patientCount = $pdo->query("SELECT COUNT(*) FROM patients")->fetchColumn();
-$doctorCount  = $pdo->query("SELECT COUNT(*) FROM doctors")->fetchColumn();
-$apptCount    = $pdo->query("SELECT COUNT(*) FROM appointments WHERE status = 'scheduled'")->fetchColumn();
+$doctorCount = $pdo->query("SELECT COUNT(*) FROM doctors")->fetchColumn();
+$apptCount = $pdo->query("SELECT COUNT(*) FROM appointments WHERE status = 'scheduled'")->fetchColumn();
 $pendingResets = $pdo->query("SELECT COUNT(*) FROM password_reset_requests WHERE status = 'pending'")->fetchColumn();
 
 $u = currentUser();
