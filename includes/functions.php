@@ -45,12 +45,8 @@ function showMsg() {
     if (empty($_SESSION['msg'])) return '';
     $m = $_SESSION['msg'];
     unset($_SESSION['msg']);
-
-    $persistent = $m['type'] === 'persistent';
-    $cls = $persistent ? 'success' : ($m['type'] === 'error' ? 'danger' : $m['type']);
-    $extra = $persistent ? ' msg-persistent' : '';
-
-    return '<div class="alert alert-' . $cls . $extra . ' alert-dismissible fade show" role="alert">'
+    $cls = $m['type'] === 'error' ? 'danger' : $m['type'];
+    return '<div class="alert alert-' . $cls . ' alert-dismissible fade show" role="alert">'
          . $m['text']
          . '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'
          . '</div>';
@@ -63,4 +59,11 @@ function generateTempPassword($length = 12) {
         $pw .= $chars[random_int(0, strlen($chars) - 1)];
     }
     return $pw;
+}
+
+function stockStatus($qty, $min, $expiry) {
+    return [
+        "low_stock" => $qty <= $min,
+        "expiring_soon" => !empty($expiry) && strtotime($expiry) <= strtotime("+30 days")
+    ];
 }

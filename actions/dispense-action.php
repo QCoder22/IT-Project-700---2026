@@ -1,65 +1,41 @@
 <?php
-require_once "../config/db.php";
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/auth.php';
+require_once __DIR__ . '/../includes/functions.php';
 
-session_start();
-
-$pdo->beginTransaction();
+requireRole('receptionist');
 
 try {
 
-    $prescription_id = $_POST['prescription_id'];
+$pdo->beginTransaction();
 
-    // Get prescription items
-    $stmt = $pdo->prepare("SELECT * FROM prescription_items WHERE prescription_id=?");
-    $stmt->execute([$prescription_id]);
-    $items = $stmt->fetchAll();
+$pid = $_POST['prescription_id'];
 
-    foreach ($items as $item) {
+$pdo->prepare("UPDATE prescriptions SET status='dispensed', dispensed_at=NOW(), dispensed_by_user_id=? WHERE prescription_id=?")
+    ->execute([$_SESSION['user_id'], $pid]);
 
-        // Check stock first
-        $check = $pdo->prepare("SELECT quantity FROM inventory WHERE id=?");
-        $check->execute([$item['medication_id']]);
-        $stock = $check->fetchColumn();
+$items = $pdo->prepare("SELECT * FROM prescription_items WHERE prescription_id=?");
+$items->execute([$pid]);
 
-        if ($stock < $item['quantity']) {
-            throw new Exception("Insufficient stock for medication ID " . $item['medication_id']);
-        }
+foreach($items as $i){
 
-        // Deduct stock
-        $update = $pdo->prepare("
-            UPDATE inventory 
-            SET quantity = quantity - ?
-            WHERE id = ?
-        ");
-        $update->execute([$item['quantity'], $item['medication_id']]);
+    $pdo->prepare("UPDATE inventory SET quantity = quantity - ? WHERE inventory_id=?")
+        ->execute([$i['quantity'], $i['inventory_id']]);
+}
 
-        // Audit log
-        $log = $pdo->prepare("
-            INSERT INTO inventory_logs
-            (medication_id, action, quantity_change, reference_id, description)
-            VALUES (?, 'dispensed', ?, ?, 'Prescription dispensed')
-        ");
+$pdo->prepare("INSERT INTO prescription_status_log
+    (prescription_id, changed_by_user_id, old_status, new_status, comment)
+    VALUES (?,?,?,?,?)")
+    ->execute([$pid, $_SESSION['user_id'], 'pending', 'dispensed', 'Dispensed at reception']);
 
-        $log->execute([
-            $item['medication_id'],
-            $item['quantity'],
-            $prescription_id
-        ]);
-    }
+$pdo->commit();
 
-    // Update prescription status
-    $pdo->prepare("
-        UPDATE prescriptions 
-        SET status='dispensed'
-        WHERE id=?
-    ")->execute([$prescription_id]);
+setMsg('success', 'Dispensed successfully.');
+redirect('/receptionist/prescription-queue.php');
 
-    $pdo->commit();
-
-    echo "Dispensed successfully";
-
-} catch (Exception $e) {
+} catch(Exception $e){
     $pdo->rollBack();
-    echo "Dispense failed: " . $e->getMessage();
+    setMsg('error', 'Error: '.$e->getMessage());
+    redirect('/receptionist/prescription-queue.php');
 }
 ?>

@@ -1,48 +1,54 @@
 <?php
-require_once "../config/db.php";
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/auth.php';
+require_once __DIR__ . '/../includes/functions.php';
+
+requireLogin();
 
 header('Content-Type: application/json');
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-
-if ($id <= 0) {
+// 1. Validate input FIRST
+if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo json_encode([
-        "status" => "error",
-        "message" => "Invalid or missing medication ID"
+        "medication_id" => null,
+        "available" => false,
+        "quantity" => null,
+        "low_stock" => false,
+        "expiring_soon" => false,
+        "error" => "Missing medication ID"
     ]);
     exit;
 }
 
-try {
+$id = intval($_GET['id']);
 
-    $stmt = $pdo->prepare("SELECT * FROM inventory WHERE id = ?");
-    $stmt->execute([$id]);
+// 2. Fetch medication safely
+$stmt = $pdo->prepare("SELECT * FROM inventory WHERE inventory_id = ?");
+$stmt->execute([$id]);
+$med = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $med = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$med) {
-        echo json_encode([
-            "status" => "error",
-            "message" => "Medication not found"
-        ]);
-        exit;
-    }
-
+// 3. Check if record exists
+if (!$med) {
     echo json_encode([
-        "status" => "success",
-        "message" => "Medication found",
-        "id" => $med['id'],
-        "name" => $med['medication_name'],
-        "quantity" => $med['quantity'],
-        "available" => $med['quantity'] > 0,
-        "low_stock" => $med['quantity'] <= $med['minimum_threshold'],
-        "expiry_date" => $med['expiry_date']
+        "medication_id" => $id,
+        "available" => false,
+        "quantity" => 0,
+        "low_stock" => false,
+        "expiring_soon" => false,
+        "error" => "Medication not found"
     ]);
-
-} catch (Exception $e) {
-
-    echo json_encode([
-        "status" => "error",
-        "message" => "Server error"
-    ]);
+    exit;
 }
+
+// 4. Calculate status
+$status = stockStatus($med['quantity'], $med['minimum_threshold'], $med['expiration_date']);
+
+// 5. Return clean JSON
+echo json_encode([
+    "medication_id" => $med['inventory_id'],
+    "available" => $med['quantity'] > 0,
+    "quantity" => $med['quantity'],
+    "low_stock" => $status['low_stock'],
+    "expiring_soon" => $status['expiring_soon']
+]);
+?>
