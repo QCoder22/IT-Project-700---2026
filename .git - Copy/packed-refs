@@ -1,0 +1,10 @@
+# pack-refs with: peeled fully-peeled sorted 
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/admin
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/appointments
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/billing
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/foundation
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/inventory
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/patient
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/prescriptions
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/feature/reports
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 refs/remotes/origin/main

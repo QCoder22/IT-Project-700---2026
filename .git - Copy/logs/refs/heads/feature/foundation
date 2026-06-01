@@ -1,0 +1,13 @@
+0000000000000000000000000000000000000000 88e55d75a38e3856cdf6a9b761e9b817e2167de4 QCoder22 <quewencole000@gmail.com> 1778837505 +0200	branch: Created from origin/feature/foundation
+88e55d75a38e3856cdf6a9b761e9b817e2167de4 9a718a3239ea722edec18a1f2beeb15dfaa47d6d QCoder22 <quewencole000@gmail.com> 1778840152 +0200	commit: added code for config/auth.php
+9a718a3239ea722edec18a1f2beeb15dfaa47d6d b96029eb92b8cd54151f2c9f391c4c3b29722dd2 QCoder22 <quewencole000@gmail.com> 1778840882 +0200	commit: added code to config/db.php
+b96029eb92b8cd54151f2c9f391c4c3b29722dd2 b28c4ded86e81e1398e0873f4532dbd3d5799cc8 QCoder22 <quewencole000@gmail.com> 1778841022 +0200	commit: added starter schema(authenication only)
+b28c4ded86e81e1398e0873f4532dbd3d5799cc8 c894c5f6294bb2ad51b363ee1bfe5498e610cfc4 QCoder22 <quewencole000@gmail.com> 1778867392 +0200	commit: added code to include/header.php
+c894c5f6294bb2ad51b363ee1bfe5498e610cfc4 ae7fbf283ac61942cc392895808bf40707053ca7 QCoder22 <quewencole000@gmail.com> 1778870190 +0200	commit: added 3 files to /actions
+ae7fbf283ac61942cc392895808bf40707053ca7 759be83571a23f82cd88d144cf5d72584adf4d17 QCoder22 <quewencole000@gmail.com> 1779029174 +0200	commit: added code to includes/functions.php
+759be83571a23f82cd88d144cf5d72584adf4d17 8f1f55422340af2ccd27dc08ec6b2adc5254551b QCoder22 <quewencole000@gmail.com> 1779029575 +0200	commit: added code to actions/change-password-action
+8f1f55422340af2ccd27dc08ec6b2adc5254551b 958281fae0e0073e7e03a56070011016f1dd71ba QCoder22 <quewencole000@gmail.com> 1779031250 +0200	commit: added code to actions/forgot-password-action
+958281fae0e0073e7e03a56070011016f1dd71ba 8a09a886489d08a3b3dc8079a355fae2d8e47d6b QCoder22 <quewencole000@gmail.com> 1779108053 +0200	commit: Update reset-password-action.php
+8a09a886489d08a3b3dc8079a355fae2d8e47d6b 185730de6e0540a176f7c3f6443b85520c666b83 QCoder22 <quewencole000@gmail.com> 1779110493 +0200	commit: added code to actions/reset-password-action.php
+185730de6e0540a176f7c3f6443b85520c666b83 a147e73774ff65989e9f118ca142e19d8ecaf4f2 QCoder22 <quewencole000@gmail.com> 1779137884 +0200	commit: UPDATED to simpler Logic
+a147e73774ff65989e9f118ca142e19d8ecaf4f2 1eae952e941ce1b13291a61ea3620446b3cbf882 QCoder22 <quewencole000@gmail.com> 1779138181 +0200	commit: code alignment change
