@@ -1,10 +1,14 @@
 <?php
+<<<<<<< HEAD
 require_once __DIR__ . '/../config/db.php';
+=======
+>>>>>>> dd763ced52ef02d8918e40e9cfdd6c9f741fad9e
 require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 requireRole('doctor');
 
+<<<<<<< HEAD
 $ds = $pdo->prepare("SELECT doctor_id FROM doctors WHERE user_id = ?");
 $ds->execute([$_SESSION['user_id']]);
 $doctorId = $ds->fetchColumn();
@@ -58,6 +62,25 @@ require_once __DIR__ . '/../includes/header.php';
 
             </tbody>
         </table>
+=======
+$u = currentUser();
+
+$pageTitle = 'Doctor Dashboard';
+require_once __DIR__ . '/../includes/header.php';
+?>
+
+<h1 class="mb-4">Doctor Dashboard</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Welcome, <?= e($u['first_name']) ?>!</h5>
+        <p class="card-text text-muted">
+            This is a placeholder dashboard. The doctor module will be built in Week 2.
+        </p>
+        <hr>
+        <p class="mb-1"><strong>Logged in as:</strong> <?= e($u['email']) ?></p>
+        <p class="mb-0"><strong>Role:</strong> <?= e($u['role']) ?></p>
+>>>>>>> dd763ced52ef02d8918e40e9cfdd6c9f741fad9e
     </div>
 </div>
 
