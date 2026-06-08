@@ -12,6 +12,9 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="medicom-auth-card">
+
+    <?= showMsg() ?>
+
     <div class="text-center mb-4">
         <i class="bi bi-key-fill" style="font-size: 3rem; color: var(--medicom-primary);"></i>
     </div>

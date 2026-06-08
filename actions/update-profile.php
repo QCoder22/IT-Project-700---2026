@@ -45,7 +45,7 @@ try {
     ");
     $stmt->execute([$email, $userId]);
 
-    if ($stmt->rowCount() > 0) {
+    if ($stmt->fetchColumn() !== false) {
         $pdo->rollBack();
         setMsg('error', 'Email is already used by another account.');
         redirect('/patient/edit-profile.php');

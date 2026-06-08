@@ -52,7 +52,7 @@ try {
     $stmt = $pdo->prepare("SELECT user_id FROM users WHERE email = ?");
     $stmt->execute([$email]);
 
-    if ($stmt->rowCount() > 0) {
+    if ($stmt->fetchColumn() !== false) {
         $pdo->rollBack();
         setMsg('error', 'An account with that email already exists.');
         redirect($source);
