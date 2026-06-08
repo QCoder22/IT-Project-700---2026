@@ -20,7 +20,7 @@ require_once __DIR__ . '/includes/header.php';
     <?= showMsg() ?>
 
     <div class="text-center mb-4">
-        <i class="bi bi-heart-pulse-fill" style="font-size: 3rem; color: var(--medicom-primary);"></i>
+        <img src="<?= BASE_URL ?>/assets/images/medicom-logo-lg.png" alt="MedicOM Clinic" height="80">
     </div>
     <h1 class="text-center">Welcome Back</h1>
     <p class="text-center subtitle">Sign in to your MedicOM account</p>

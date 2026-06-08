@@ -26,7 +26,8 @@ $pageTitle = $pageTitle ?? 'MedicOM';
 <nav class="navbar navbar-expand-lg navbar-dark medicom-navbar">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="<?= dashboardUrl($role) ?>">
-            <i class="bi bi-heart-pulse-fill"></i> MedicOM
+            <img src="<?= BASE_URL ?>/assets/images/medicom-logo.png" alt="MedicOM Clinic" height="32" class="me-2">
+            MedicOM        
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
