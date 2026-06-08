@@ -13,7 +13,7 @@
 }
 
 html, body {
-    height: 100%;
+    min-height: 100%;
 }
 
 body {
@@ -96,7 +96,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     background: linear-gradient(135deg, var(--medicom-primary) 0%, var(--medicom-accent) 100%);
     padding: 2rem 1rem;
     box-sizing: border-box;

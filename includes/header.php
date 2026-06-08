@@ -57,5 +57,4 @@ $pageTitle = $pageTitle ?? 'MedicOM';
             <?= showMsg() ?>
 <?php else: ?>
 <main class="medicom-auth-main">
-    <?= showMsg() ?>
 <?php endif; ?>
