@@ -75,6 +75,13 @@ require_once __DIR__ . '/../includes/header.php';
                            value="<?= e($editStaff['phone'] ?? $old['phone'] ?? '') ?>">
                 </div>
 
+                <?php if (!$editStaff): ?>
+                <div class="col-md-6">
+                    <label class="form-label">Initial Password</label>
+                    <input class="form-control" type="password" name="password" required minlength="8">
+                </div>
+                <?php endif; ?>
+
             </div>
 
             <br>
@@ -91,7 +98,7 @@ require_once __DIR__ . '/../includes/header.php';
 
         <?php if (!$editStaff): ?>
         <small class="text-muted d-block mt-3">
-            A temporary password will be generated and shown once. The receptionist must change it on first login.
+            Set an initial password and share it with the receptionist. They will be required to change it on first login.
         </small>
         <?php endif; ?>
 

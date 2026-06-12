@@ -71,10 +71,9 @@ try {
 }
 
 $name = $req['first_name'] . ' ' . $req['last_name'];
-setMsg('persistent',
-    'Temporary password for ' . e($name) . ' (' . e($req['email']) . '): '
-    . '<strong style="font-family:monospace;font-size:1.1em;background:#fff;padding:2px 8px;border-radius:3px;">'
-    . e($tempPw) . '</strong>'
-    . '<br><small>Give this to the user. They must change it on next login.</small>'
-);
+$_SESSION['reset_result'] = [
+    'name'     => $name,
+    'email'    => $req['email'],
+    'password' => $tempPw,
+];
 redirect('/admin/password-resets.php');

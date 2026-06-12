@@ -26,6 +26,7 @@ $first_name = trim($_POST['first_name'] ?? '');
 $last_name  = trim($_POST['last_name'] ?? '');
 $email      = trim($_POST['email'] ?? '');
 $phone      = trim($_POST['phone'] ?? '');
+$password   = $_POST['password'] ?? '';
 
 $_SESSION['old'] = compact('first_name', 'last_name', 'email', 'phone');
 
@@ -69,8 +70,12 @@ try {
         redirect('/admin/manage-staff.php');
     }
 
-    $tempPassword = generateTempPassword();
-    $hash = password_hash($tempPassword, PASSWORD_DEFAULT);
+    if (strlen($password) < 8) {
+        setMsg('error', 'Initial password must be at least 8 characters.');
+        redirect('/admin/manage-staff.php');
+    }
+
+    $hash = password_hash($password, PASSWORD_DEFAULT);
 
     $u = $pdo->prepare("
         INSERT INTO users (first_name, last_name, email, phone, password_hash, role, is_active, must_change_password)
@@ -79,7 +84,7 @@ try {
     $u->execute([$first_name, $last_name, $email, $phone, $hash]);
 
     unset($_SESSION['old']);
-    setMsg('success', 'Receptionist added. Temporary password: ' . $tempPassword . ' — share this with them; they must change it on first login.');
+    setMsg('success', 'Receptionist added. Share the initial password with them — they must change it on first login.');
     redirect('/admin/manage-staff.php');
 
 } catch (PDOException $e) {

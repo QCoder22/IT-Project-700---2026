@@ -35,6 +35,7 @@ $phone           = trim($_POST['phone'] ?? '');
 $specialization  = trim($_POST['specialization'] ?? '');
 $license_number  = trim($_POST['license_number'] ?? '');
 $consultation_fee = $_POST['consultation_fee'] ?? '0';
+$password         = $_POST['password'] ?? '';
 
 $_SESSION['old'] = compact('first_name', 'last_name', 'email', 'phone', 'specialization', 'license_number', 'consultation_fee');
 
@@ -91,9 +92,14 @@ try {
         redirect('/admin/manage-doctors.php');
     }
 
-    // generate a temp password; doctor must change on first login
-    $tempPassword = generateTempPassword();
-    $hash = password_hash($tempPassword, PASSWORD_DEFAULT);
+    // admin sets the initial password; doctor must change it on first login
+    if (strlen($password) < 8) {
+        $pdo->rollBack();
+        setMsg('error', 'Initial password must be at least 8 characters.');
+        redirect('/admin/manage-doctors.php');
+    }
+
+    $hash = password_hash($password, PASSWORD_DEFAULT);
 
     $u = $pdo->prepare("
         INSERT INTO users (first_name, last_name, email, phone, password_hash, role, is_active, must_change_password)
@@ -112,7 +118,7 @@ try {
     $pdo->commit();
     unset($_SESSION['old']);
 
-    setMsg('success', 'Doctor added. Temporary password: ' . $tempPassword . ' — share this with the doctor; they must change it on first login.');
+    setMsg('success', 'Doctor added. Share the initial password with them — they must change it on first login.');
     redirect('/admin/manage-doctors.php');
 
 } catch (PDOException $e) {

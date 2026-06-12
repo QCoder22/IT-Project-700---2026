@@ -18,6 +18,10 @@ $requests = $ps->fetchAll();
 
 $pageTitle = 'Password Reset Requests';
 require_once __DIR__ . '/../includes/header.php';
+
+// If a reset was just issued, pull the one-time result for the modal, then clear it.
+$resetResult = $_SESSION['reset_result'] ?? null;
+unset($_SESSION['reset_result']);
 ?>
 
 <h1 class="mb-4"><i class="bi bi-key-fill"></i> Password Reset Requests</h1>
@@ -106,10 +110,96 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="alert alert-info mt-4">
     <h6 class="alert-heading"><i class="bi bi-info-circle"></i> How this works</h6>
     <p class="mb-0 small">
-        Click <strong>Reset</strong> to generate a random temporary password. The password is shown
-        to you once - copy it and give it to the user via phone or in person. The user will be
-        required to change it on next login.
+        Click <strong>Reset</strong> to generate a temporary password. It appears in a popup
+        with a <strong>Copy</strong> button - copy it and give it to the user via phone or in
+        person, then click <strong>I&rsquo;ve saved this password</strong> to close. The user
+        will be required to change it on next login.
     </p>
 </div>
+
+<?php if ($resetResult): ?>
+<!-- Temporary password modal: blocks until the admin acknowledges -->
+<div class="modal fade" id="resetPwModal" tabindex="-1" aria-labelledby="resetPwLabel"
+     data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="resetPwLabel">
+                    <i class="bi bi-key-fill"></i> Temporary Password Issued
+                </h5>
+            </div>
+            <div class="modal-body">
+                <p class="mb-1">
+                    For <strong><?= e($resetResult['name']) ?></strong>
+                    <span class="text-muted">(<?= e($resetResult['email']) ?>)</span>
+                </p>
+                <p class="text-muted small mb-3">
+                    Copy this password and give it to the user via phone or in person.
+                    They will be required to change it on next login.
+                </p>
+
+                <div class="input-group">
+                    <input type="text" id="tempPwField" class="form-control"
+                           style="font-family:monospace; font-size:1.15em; font-weight:bold;"
+                           value="<?= e($resetResult['password']) ?>" readonly>
+                    <button class="btn btn-outline-primary" type="button" id="copyPwBtn">
+                        <i class="bi bi-clipboard"></i> Copy
+                    </button>
+                </div>
+                <div id="copyFeedback" class="form-text text-success" style="visibility:hidden;">
+                    Copied to clipboard.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="ackPwBtn" disabled>
+                    I&rsquo;ve saved this password
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var modalEl = document.getElementById('resetPwModal');
+    var modal = new bootstrap.Modal(modalEl);
+    modal.show();
+
+    var pwField  = document.getElementById('tempPwField');
+    var copyBtn  = document.getElementById('copyPwBtn');
+    var ackBtn   = document.getElementById('ackPwBtn');
+    var feedback = document.getElementById('copyFeedback');
+
+    function markCopied() {
+        feedback.style.visibility = 'visible';
+        copyBtn.innerHTML = '<i class="bi bi-clipboard-check"></i> Copied';
+        ackBtn.disabled = false;   // only allow dismiss once they've copied (or tried to)
+    }
+
+    copyBtn.addEventListener('click', function () {
+        // Prefer the modern clipboard API (works on localhost / https)
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(pwField.value).then(markCopied, fallbackCopy);
+        } else {
+            fallbackCopy();
+        }
+    });
+
+    function fallbackCopy() {
+        // Fallback: select the field so the admin can copy manually
+        pwField.removeAttribute('readonly');
+        pwField.select();
+        pwField.setSelectionRange(0, 99999);
+        try { document.execCommand('copy'); } catch (e) {}
+        pwField.setAttribute('readonly', 'readonly');
+        markCopied();
+    }
+
+    ackBtn.addEventListener('click', function () {
+        modal.hide();
+    });
+});
+</script>
+<?php endif; ?>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

@@ -96,6 +96,13 @@ require_once __DIR__ . '/../includes/header.php';
                            value="<?= e($editDoctor['consultation_fee'] ?? $old['consultation_fee'] ?? '0.00') ?>" required>
                 </div>
 
+                <?php if (!$editDoctor): ?>
+                <div class="col-md-6">
+                    <label class="form-label">Initial Password</label>
+                    <input class="form-control" type="password" name="password" required minlength="8">
+                </div>
+                <?php endif; ?>
+
             </div>
 
             <br>
@@ -112,7 +119,7 @@ require_once __DIR__ . '/../includes/header.php';
 
         <?php if (!$editDoctor): ?>
         <small class="text-muted d-block mt-3">
-            A temporary password will be generated and shown once. The doctor must change it on first login.
+            Set an initial password and share it with the doctor. They will be required to change it on first login.
         </small>
         <?php endif; ?>
 
